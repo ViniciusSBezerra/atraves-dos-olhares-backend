@@ -22,7 +22,7 @@ const Ensaios = sequelize.define('ensaios', {
         type: DataTypes.STRING,
 
     }
-})
-Ensaios.sync({ alter: true })
+});
 
-module.exports = Ensaios
+
+module.exports = Ensaios;

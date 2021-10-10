@@ -23,8 +23,8 @@ const Image = sequelize.define('Image', {
         type: DataTypes.STRING,
 
     }
-})
-Image.sync({ alter: true })
+});
 
 
-module.exports = Image
+
+module.exports = Image;

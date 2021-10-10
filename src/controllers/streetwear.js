@@ -1,67 +1,84 @@
-const Image = require('../database/models/image')
+const Streetwear = require('../database/models/image');
 
-const aws = require("aws-sdk")
+const aws = require('aws-sdk');
 
 module.exports = {
 
-    async upload(req, res) {
-        const { originalname: name, size, key, location: url } = req.file
+    async viewStreerwear(req, res) {
 
-        await Image.create({
-            name,
-            size,
-            key,
-            url
-        }).then(() => {
-            return res.json({
-                error: false,
-                message: "Streetwear enviado com sucesso!"
-            })
-        })
+        const { id } = req.params;
+
+        try {
+            const streetwear = await Streetwear.findOne({ where: { id } })
+
+            return res.status(200).json({ streetwear });
+        } catch (error) {
+            return res.status(400).json({ message: error });
+        }
 
     },
 
-    async listImage(req, res) {
-        Image.findAll({}).then((response) => {
-            return res.json({
-                response
+    async uploadStreetwear(req, res) {
+        const { originalname: name, size, key, location: url } = req.file;
+
+        try {
+            await Streetwear.create({
+                name,
+                size,
+                key,
+                url
             })
-        })
+
+            return res.status(201).json({ message: "Streetwear publicado com sucesso!" });
+        } catch (error) {
+            return res.status(400).json({ message: error });
+        }
+
     },
 
-    async deleteImage(req, res) {
+    async listStreetwear(req, res) {
+        try {
+            const streetwear = await Streetwear.findAll({})
+
+            return res.status(200).json({ streetwear });
+        } catch (error) {
+            return res.status(400).json({ message: error });
+        }
+
+    },
+
+    async deleteStreetwear(req, res) {
 
         const s3 = new aws.S3();
 
         const id = req.params.id;
 
-        let keyImage = await Image.findOne({
+        let keyImage = await Streetwear.findOne({
             attributes: ['key'],
             where: {
                 id: id
             }
-        })
+        });
 
         let params = {
             Bucket: "atraves-dos-olhares",
             Key: keyImage.key
         }
 
-        s3.deleteObject(params, function (err, data) {
-            if (err) console.log(err)
-            else return data
-        })
+        try {
+            s3.deleteObject(params, function (err, data) {
+                if (err) console.log(err)
+                else return data
+            });
 
-        await Image.destroy({ where: { id } }).then(() => {
+            await Streetwear.destroy({ where: { id } })
 
-            return res.json({
-                error: false,
-                message: "Imagem deletada com sucesso!"
-            })
-        })
+            return res.status(200).json({ message: "Streetwear deletado com sucesso!" })
+        } catch (error) {
+            return res.status(400).json({ message: error });
+        }
     }
+
 }
-
-
 
 

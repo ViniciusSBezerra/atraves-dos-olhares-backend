@@ -23,7 +23,7 @@ module.exports = {
             return res.json({
                 error: true,
                 message: "Erro: Email ou senha incorretos!"
-            })
+            });
         }
 
 
@@ -36,15 +36,13 @@ module.exports = {
 
         const token = jwt.sign({ id: admin.id }, process.env.KEY_JWT, {
             expiresIn: '7d'
-        })
+        });
 
         return res.json({
             error: false,
             message: "Login realizado",
             token
-        })
-
-
+        });
 
     }
 }

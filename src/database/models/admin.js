@@ -27,8 +27,7 @@ const Admin = sequelize.define('admin', {
         allowNull: false
     },
 
-})
+});
 
-Admin.sync({ alter: true });
 
-module.exports = Admin
+module.exports = Admin;

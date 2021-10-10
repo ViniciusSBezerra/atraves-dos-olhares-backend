@@ -5,7 +5,7 @@ const multer = require('multer');
 
 const uploadConfig = require('./middlewares/upload');
 
-const uploadImage = require('./controllers/streetwear');
+const uploadStreetwear = require('./controllers/streetwear');
 
 const uploadEnsaio = require('./controllers/ensaios');
 
@@ -15,11 +15,12 @@ const login = require('./middlewares/login');
 
 const authentication = require('./middlewares/authentication');
 
-routes.post("/upload", authentication.authentication, multer(uploadConfig).single('image'), uploadImage.upload);
-routes.get("/list-image", uploadImage.listImage);
-routes.delete("/delete-image/:id", authentication.authentication, uploadImage.deleteImage);
+routes.post("/upload-streetwear", authentication.authentication, multer(uploadConfig).single('image'), uploadStreetwear.uploadStreetwear);
+routes.get("/view-streetwear/:id", authentication.authentication, uploadStreetwear.viewStreerwear);
+routes.get("/list-streetwear", uploadStreetwear.listStreetwear);
+routes.delete("/delete-streetwear/:id", authentication.authentication, uploadStreetwear.deleteStreetwear);
 
-routes.get("/visualizar-ensaio/:id", authentication.authentication, uploadEnsaio.visualizarEnsaio)
+routes.get("/view-essay/:id", authentication.authentication, uploadEnsaio.visualizarEnsaio);
 routes.post("/upload-ensaio", authentication.authentication, multer(uploadConfig).single('ensaio'), uploadEnsaio.uploadEnsaio);
 routes.get("/list-ensaios", uploadEnsaio.listEnsaio);
 routes.delete("/delete-ensaio/:id", authentication.authentication, uploadEnsaio.deleteEnsaio);
@@ -29,7 +30,7 @@ routes.get("/list-admin", authentication.authentication, admin.listAdmin);
 routes.delete("/delete-admin/:id", authentication.authentication, admin.deleteAdmin);
 routes.put("/update-admin/:id", authentication.authentication, admin.updateAdmin);
 
-routes.post("/login", login.login)
+routes.post("/login", login.login);
 
 
 module.exports = routes
